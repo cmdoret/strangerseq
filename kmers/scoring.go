@@ -55,10 +55,11 @@ func RandSeqs(nseq int, seqlen int, bases []string, gc float64) []string {
 
 // ScoreSeqs assigns two scores to each sequence in a list. Scores vary between 0 and 1.
 // The first score only takes k-mer frequency into account, while the second score is adjusted
-// for GC content divergence to the target genome. Rare k-mers increase the score and deviation 
+// for GC content divergence to the target genome. Rare k-mers increase the score and deviation
 // to genome GC content decreases it.
-func ScoreSeqs(seqs []string, genome *Genome) []float64, []float64 {
+func ScoreSeqs(seqs []string, genome *Genome) ([]float64, []float64) {
 	kmerScores := make([]float64, len(seqs))
+	fullScores := make([]float64, len(seqs))
 	// Get number of occurences of most frequent k-mer to get relative-to-max frequencies
 	highFreq := 0.0
 	for _, v := range genome.Kmers {
@@ -78,8 +79,8 @@ func ScoreSeqs(seqs []string, genome *Genome) []float64, []float64 {
 			}
 		}
 		kmerScores[s] /= float64(len(seq))
-    }
-    fullScores := copy(kmerScores)
+	}
+	copy(fullScores, kmerScores)
 	for s, seq := range seqs {
 		// GC part of score, weights genome.GC weight
 		GCdiv := genome.GC - float64(SeqGC(seq)/len(seq))
