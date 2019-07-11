@@ -53,10 +53,12 @@ func RandSeqs(nseq int, seqlen int, bases []string, gc float64) []string {
 	return sequences
 }
 
-// ScoreSeqs assigns a score to each sequence in a list. Scores vary between 0 and 1.
-// Rare k-mers increase the score and deviation to genome GC content decreases it.
-func ScoreSeqs(seqs []string, genome *Genome) []float64 {
-	scores := make([]float64, len(seqs))
+// ScoreSeqs assigns two scores to each sequence in a list. Scores vary between 0 and 1.
+// The first score only takes k-mer frequency into account, while the second score is adjusted
+// for GC content divergence to the target genome. Rare k-mers increase the score and deviation 
+// to genome GC content decreases it.
+func ScoreSeqs(seqs []string, genome *Genome) []float64, []float64 {
+	kmerScores := make([]float64, len(seqs))
 	// Get number of occurences of most frequent k-mer to get relative-to-max frequencies
 	highFreq := 0.0
 	for _, v := range genome.Kmers {
@@ -70,21 +72,24 @@ func ScoreSeqs(seqs []string, genome *Genome) []float64 {
 			kmer := seq[b : b+genome.KmerSize]
 			// Favor frequent k-mers if similar enabled, rare otherwise
 			if genome.Similar == true {
-				scores[s] += float64(genome.Kmers[kmer]) / highFreq
+				kmerScores[s] += float64(genome.Kmers[kmer]) / highFreq
 			} else {
-				scores[s] += 1 - float64(genome.Kmers[kmer])/highFreq
+				kmerScores[s] += 1 - float64(genome.Kmers[kmer])/highFreq
 			}
 		}
-		scores[s] /= float64(len(seq))
+		kmerScores[s] /= float64(len(seq))
+    }
+    fullScores := copy(kmerScores)
+	for s, seq := range seqs {
 		// GC part of score, weights genome.GC weight
 		GCdiv := genome.GC - float64(SeqGC(seq)/len(seq))
 		if GCdiv < 0 { // Get to absolute value
 			GCdiv = -GCdiv
 		}
 		// High GC deviation decreases score
-		scores[s] -= GCdiv * genome.GCWeight
+		fullScores[s] -= GCdiv * genome.GCWeight
 		// Normalize score to be between 0 and 1
-		scores[s] /= (1 + genome.GCWeight)
+		fullScores[s] /= (1 + genome.GCWeight)
 	}
-	return scores
+	return kmerScores, fullScores
 }

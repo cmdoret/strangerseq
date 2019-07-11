@@ -50,13 +50,14 @@ func main() {
 	seqs := ProcessedGenome.GenSeqs(*a.NSeq, *a.SeqLen)
 	if *a.CompSeq { // Comparison mode enabled
 		controlSeq := kmers.RandSeqs(*a.NSeq, *a.SeqLen, ProcessedGenome.Bases, ProcessedGenome.GC)
-		seqScore := kmers.ScoreSeqs(seqs, ProcessedGenome)
-		controlScore := kmers.ScoreSeqs(controlSeq, ProcessedGenome)
+        // First score only takes k-mers into account, second score adjusted for GC deviation
+		seqKmerScore, seqFullScore := kmers.ScoreSeqs(seqs, ProcessedGenome)
+		controlKmerScore, controlFullScore := kmers.ScoreSeqs(controlSeq, ProcessedGenome)
 		for i := range seqs {
-			fmt.Printf("seq %f %s\n", seqScore[i], seqs[i])
+			fmt.Printf("seq %f %f %s\n", seqKmerScore[i], seqFullScore[i], seqs[i])
 		}
 		for i := range controlSeq {
-			fmt.Printf("control %f %s\n", controlScore[i], controlSeq[i])
+			fmt.Printf("control %f %f %s\n", controlKmerScore[i], controlFullScore[i], controlSeq[i])
 		}
 	} else { // By default, only output sequences
 		for _, s := range seqs {
