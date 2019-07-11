@@ -1,0 +1,66 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/cmdoret/strangerseq/kmers"
+)
+
+type args struct {
+	GenomeFile *string
+	KmerSize   *int
+	GCWeight   *float64
+	SeqLen     *int
+	CompSeq    *bool
+	NSeq       *int
+	Similar    *bool
+}
+
+func parseArgs() *args {
+	var clArgs *args
+	clArgs = new(args)
+	var myUsage = func() {
+		fmt.Fprintln(os.Stderr, "Program to generate sequence with minimal microhomology and optionally, similar GC content to the input genome.")
+		fmt.Fprintln(os.Stderr, "Multiple sequences are generated and sorted by score.")
+		// fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Usage = myUsage
+	clArgs.GenomeFile = flag.String("fasta", "", "Path to genome file in FASTA format. (required)")
+	clArgs.KmerSize = flag.Int("kmer.size", 8, "Length of K-mers on which to optimize sequences.")
+	clArgs.GCWeight = flag.Float64("gc.weight", 1, "Weight given to the GC content when scoring sequences.")
+	clArgs.SeqLen = flag.Int("seq.len", 1000, "Length of the sequences to generate.")
+	clArgs.CompSeq = flag.Bool("comp.seq", false, "Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison.")
+	clArgs.NSeq = flag.Int("n.seq", 100, "Number of sequences to generate.")
+	clArgs.Similar = flag.Bool("similar", false, "Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).")
+	flag.Parse()
+	if *clArgs.GenomeFile == "" {
+		log.Fatal("Path to input genome required.")
+	}
+	return clArgs
+}
+
+func main() {
+	a := parseArgs()
+	//defer profile.Start().Stop()
+	ProcessedGenome := kmers.NewGenome(*a.GenomeFile, *a.KmerSize, *a.GCWeight, *a.Similar)
+	seqs := ProcessedGenome.GenSeqs(*a.NSeq, *a.SeqLen)
+	if *a.CompSeq { // Comparison mode enabled
+		controlSeq := kmers.RandSeqs(*a.NSeq, *a.SeqLen, ProcessedGenome.Bases, ProcessedGenome.GC)
+		seqScore := kmers.ScoreSeqs(seqs, ProcessedGenome)
+		controlScore := kmers.ScoreSeqs(controlSeq, ProcessedGenome)
+		for i := range seqs {
+			fmt.Printf("seq %f %s\n", seqScore[i], seqs[i])
+		}
+		for i := range controlSeq {
+			fmt.Printf("control %f %s\n", controlScore[i], controlSeq[i])
+		}
+	} else { // By default, only output sequences
+		for _, s := range seqs {
+			fmt.Println(s)
+		}
+	}
+}
