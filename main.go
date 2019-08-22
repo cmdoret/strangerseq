@@ -33,7 +33,7 @@ func parseArgs() *args {
 	clArgs.KmerSize = flag.Int("kmer.size", 8, "Length of K-mers on which to optimize sequences.")
 	clArgs.GCWeight = flag.Float64("gc.weight", 1, "Weight given to the GC content when scoring sequences.")
 	clArgs.SeqLen = flag.Int("seq.len", 1000, "Length of the sequences to generate.")
-	clArgs.CompSeq = flag.Bool("comp.seq", false, "Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison.")
+    clArgs.CompSeq = flag.Bool("comp.seq", false, "Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison. Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight), 2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.")
 	clArgs.NSeq = flag.Int("n.seq", 100, "Number of sequences to generate.")
 	clArgs.Similar = flag.Bool("similar", false, "Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).")
 	flag.Parse()

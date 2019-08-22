@@ -16,6 +16,8 @@ Program to generate sequence with minimal microhomology and optionally, similar 
 Multiple sequences are generated and sorted by score.
   -comp.seq
     	Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison.
+        Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight),
+        2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.
   -fasta string
     	Path to genome file in FASTA format. (required)
   -gc.weight float
