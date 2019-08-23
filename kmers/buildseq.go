@@ -1,4 +1,4 @@
-// Using the Markov chain to generate sequences from the Genome struct.
+// Using a Markov chain to generate sequences from the Genome struct.
 
 package kmers
 
@@ -12,7 +12,9 @@ import (
 
 // SeedSeq will pick a k-mer using the of their frequencies
 // as probability weights. Uses inverse frequencies if the
-// Similar attribut of receiver genome is set to False.
+// Similar attribute of receiver genome is set to False.
+// Note that SeedSeq does not directly take GC content into
+// account when picking a k-mer.
 func (g *Genome) SeedSeq() string {
 	// Initialize array to store cumulative frequency of kmers
 	totFreq := float64(sumMap(g.Kmers))

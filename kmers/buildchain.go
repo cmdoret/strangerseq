@@ -1,4 +1,4 @@
-// Utilities to build and populate the Markov chain in the Genome struct.
+// Utilities to build and populate the Markov chain from a Genome struct.
 
 package kmers
 
