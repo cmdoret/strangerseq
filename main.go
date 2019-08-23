@@ -24,7 +24,7 @@ func parseArgs() *args {
 	var clArgs *args
 	clArgs = new(args)
 	var myUsage = func() {
-		fmt.Fprintln(os.Stderr, "Program to generate sequence with minimal microhomology and optionally, similar GC content to the input genome.")
+		fmt.Fprintln(os.Stderr, "Program to generate sequences with minimal microhomology and optionally, similar GC content to the input genome.")
 		fmt.Fprintln(os.Stderr, "Multiple sequences are generated and sorted by score.")
 		// fmt.Fprintf(os.Stderr, "Usage of %s:\n", os.Args[0])
 		flag.PrintDefaults()
@@ -40,7 +40,7 @@ func parseArgs() *args {
     clArgs.Version = flag.Bool("version", false, "Shows version number of the binary.")
 	flag.Parse()
     if *clArgs.Version {
-      fmt.Println("0.0.2")
+      fmt.Println("v0.0.3")
       os.Exit(1)
     }
 	if *clArgs.GenomeFile == "" {
