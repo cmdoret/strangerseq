@@ -40,7 +40,7 @@ func parseArgs() *args {
     clArgs.Version = flag.Bool("version", false, "Shows version number of the binary.")
 	flag.Parse()
     if *clArgs.Version {
-      fmt.Println("v0.0.3")
+      fmt.Println("v0.0.3b")
       os.Exit(1)
     }
 	if *clArgs.GenomeFile == "" {

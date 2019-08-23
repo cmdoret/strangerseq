@@ -3,9 +3,9 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.12
-    working_directory: /go/src/github.com/cmdoret/strangerseq
     steps:
       - run: make
+
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
@@ -15,6 +15,7 @@ jobs:
           command: |
             VERSION=$(strangerseq -version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} workdir/
+
 workflows:
   version: 2
   main:
