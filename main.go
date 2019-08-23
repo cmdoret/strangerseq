@@ -17,6 +17,7 @@ type args struct {
 	CompSeq    *bool
 	NSeq       *int
 	Similar    *bool
+    Version    *bool
 }
 
 func parseArgs() *args {
@@ -38,6 +39,10 @@ func parseArgs() *args {
 	clArgs.Similar = flag.Bool("similar", false, "Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).")
     clArgs.Version = flag.Bool("version", false, "Shows version number of the binary.")
 	flag.Parse()
+    if *clArgs.Version {
+      fmt.Println("0.0.2")
+      os.Exit(1)
+    }
 	if *clArgs.GenomeFile == "" {
 		log.Fatal("Path to input genome required.")
 	}
@@ -46,9 +51,6 @@ func parseArgs() *args {
 
 func main() {
 	a := parseArgs()
-    if *a.Version {
-      fmt.Println("0.0.2")
-    }
 	//defer profile.Start().Stop()
 	ProcessedGenome := kmers.NewGenome(*a.GenomeFile, *a.KmerSize, *a.GCWeight, *a.Similar)
 	seqs := ProcessedGenome.GenSeqs(*a.NSeq, *a.SeqLen)
