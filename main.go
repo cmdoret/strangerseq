@@ -36,6 +36,7 @@ func parseArgs() *args {
     clArgs.CompSeq = flag.Bool("comp.seq", false, "Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison. Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight), 2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.")
 	clArgs.NSeq = flag.Int("n.seq", 100, "Number of sequences to generate.")
 	clArgs.Similar = flag.Bool("similar", false, "Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).")
+    clArgs.Version = flag.Bool("version", false, "Shows version number of the binary.")
 	flag.Parse()
 	if *clArgs.GenomeFile == "" {
 		log.Fatal("Path to input genome required.")
@@ -45,6 +46,9 @@ func parseArgs() *args {
 
 func main() {
 	a := parseArgs()
+    if *a.Version {
+      fmt.Println("0.0.2")
+    }
 	//defer profile.Start().Stop()
 	ProcessedGenome := kmers.NewGenome(*a.GenomeFile, *a.KmerSize, *a.GCWeight, *a.Similar)
 	seqs := ProcessedGenome.GenSeqs(*a.NSeq, *a.SeqLen)
