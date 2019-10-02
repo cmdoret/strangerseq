@@ -60,7 +60,7 @@ func (g *Genome) FastaToProfile(file string) {
 
 // NewGenome constructs a Genome object based on a FASTA file
 // and predefined k-mer size.
-func NewGenome(path string, k int, gcWeight float64, similar bool) *Genome {
+func NewGenome(path string, k int, gcWeight float64, similar bool, FixedGC float64) *Genome {
 	g := &Genome{KmerSize: k, Bases: []string{"A", "C", "G", "T"}}
 	var NLmers int
 	// Number of L-mers (k-1 mers)
@@ -75,6 +75,10 @@ func NewGenome(path string, k int, gcWeight float64, similar bool) *Genome {
 	// Use fasta file to set number of occurences of each kmer
 	g.FastaToProfile(path)
 	g.GCWeight = gcWeight
+    // If user supplied a target GC content, use it instead of the genome's value
+    if FixedGC != nil{
+        g.GC = FixedGC
+    }
 	// Initialize data structures for Markov chain
 	g.Chain.Matrix = Build2dSlice(NLmers, len(g.Bases))
 	// allocate composed 2d array
