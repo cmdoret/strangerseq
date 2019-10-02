@@ -24,7 +24,7 @@ type Genome struct {
 	Similar  bool    // Should equences generated use frequent k-mers ? (instaed of rare k-mers)
 }
 
-// SeqGC returns the number of GC bases a sequence. Does not handle IUPAC
+// SeqGC returns the number of GC bases in a sequence. Does not handle IUPAC
 // ambiguous bases.
 func SeqGC(seq string) int {
 	GorC := regexp.MustCompile("G|C")
@@ -76,7 +76,7 @@ func NewGenome(path string, k int, gcWeight float64, similar bool, FixedGC float
 	g.FastaToProfile(path)
 	g.GCWeight = gcWeight
     // If user supplied a target GC content, use it instead of the genome's value
-    if FixedGC != nil{
+    if FixedGC != 0.0{
         g.GC = FixedGC
     }
 	// Initialize data structures for Markov chain

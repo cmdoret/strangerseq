@@ -33,7 +33,7 @@ func parseArgs() *args {
 	flag.Usage = myUsage
 	clArgs.GenomeFile = flag.String("fasta", "", "Path to genome file in FASTA format. (required)")
 	clArgs.KmerSize = flag.Int("kmer.size", 8, "Length of K-mers on which to optimize sequences.")
-    clArgs.FixedGC = flag.Float64("fixed.gc", nil, "Fixed target GC content to use as target. The default is to use the input genome's GC content.")
+    clArgs.FixedGC = flag.Float64("fixed.gc", 0.0, "Fixed target GC content to use as target. The default is to use the input genome's GC content.")
 	clArgs.GCWeight = flag.Float64("gc.weight", 1, "Weight given to the GC content when scoring sequences.")
 	clArgs.SeqLen = flag.Int("seq.len", 1000, "Length of the sequences to generate.")
     clArgs.CompSeq = flag.Bool("comp.seq", false, "Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison. Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight), 2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.")
@@ -48,8 +48,9 @@ func parseArgs() *args {
 	if *clArgs.GenomeFile == "" {
 		log.Fatal("Path to input genome required.")
 	}
-    if *clArgs.FixedGC != nil && *clArgs.FixedGC < 1.0 && *clArgs.FixedGC > 0.0 {
-            log.Fatal("Fixed target GC content must be a value between 0 and 1")
+    if *clArgs.FixedGC != 0.0 && (*clArgs.FixedGC > 1.0 || *clArgs.FixedGC < 0.0) {
+        log.Fatal("Fixed target GC content must be a value between 0 and 1")
+    }
 	return clArgs
 }
 
