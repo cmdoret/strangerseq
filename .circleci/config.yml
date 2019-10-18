@@ -18,8 +18,8 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-        - name: "Publish release on github"
-        - command: |
+        name: "Publish release on github"
+        command: |
             VERSION=$(./workdir/strangerseq -version)
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./workdir/
 
