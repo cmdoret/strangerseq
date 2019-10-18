@@ -11,23 +11,27 @@ It is possible to add a GC deviation constraint to the sequences to force GC con
 
 #### Usage
 ```
-strangerseq -h
-Program to generate sequence with minimal microhomology and optionally, similar GC content to the input genome.
+strangerseq -help
+Program to generate sequences with minimal microhomology and optionally, similar GC content to the input genome.
 Multiple sequences are generated and sorted by score.
   -comp.seq
-        Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison. Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight), 2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.
+    	Enable to return scores in addition to sequences and include randomly generated GC-weighted sequences for comparison. Columns of the output are: 1. sequence type (generated through markov model or randomly picked with GC weight), 2. Score without accounting for GC divergence, 3. Score corrected for GC divergence, 4. Sequence.
   -fasta string
-        Path to genome file in FASTA format. (required)
+    	Path to genome file in FASTA format. (required)
+  -fixed.gc float
+    	Fixed target GC content to use as target. The default is to use the input genome's GC content.
   -gc.weight float
-        Weight given to the GC content when scoring sequences. (default 1)
+    	Weight given to the GC content when scoring sequences. (default 1)
   -kmer.size int
-        Length of K-mers on which to optimize sequences. (default 8)
+    	Length of K-mers on which to optimize sequences. (default 8)
   -n.seq int
-        Number of sequences to generate. (default 100)
+    	Number of sequences to generate. (default 100)
   -seq.len int
-        Length of the sequences to generate. (default 1000)
+    	Length of the sequences to generate. (default 1000)
   -similar
-        Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).
+    	Generate similar sequences (frequent k-mers) instead of different ones (rare k-mers).
+  -version
+    	Shows version number of the binary.
 ```
 
 #### Example
