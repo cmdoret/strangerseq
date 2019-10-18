@@ -1,26 +1,23 @@
 GOFILES = $(shell find . -name '*.go')
 VERSION=""
 
-default: build
+default: release 
 
-workdir:
-	mkdir -p build/
+build/:
+	mkdir -p $@
 
 
-.PHONY: windows
-build/strangerseq: $(GOFILES)
+build/strangerseq-windows.exe: $(GOFILES) build/
 	go get -d .
-	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o build/strangerseq-windows.exe .
+	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o $@ .
 
-.PHONY: osx
-build/strangerseq: $(GOFILES)
+build/strangerseq-osx: $(GOFILES) build/
 	go get -d .
-	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o build/strangerseq-osx .
+	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o $@ .
 
-.PHONY: linux
-build/strangerseq: $(GOFILES)
+build/strangerseq-linux: $(GOFILES) build/
 	go get -d .
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o build/strangerseq-linux .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o $@ .
 
 .PHONY: release
-build: windows linux osx
+release: build/strangerseq-linux build/strangerseq-windows.exe build/strangerseq-osx
