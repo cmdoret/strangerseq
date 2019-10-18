@@ -4,10 +4,10 @@ VERSION=""
 default: build
 
 workdir:
-	mkdir -p workdir
+	mkdir -p build/
 
-build: workdir/strangerseq
+build: build/strangerseq
 
-workdir/strangerseq: $(GOFILES)
+build/strangerseq: $(GOFILES)
 	go get -d .
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o workdir/strangerseq .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o build/strangerseq .

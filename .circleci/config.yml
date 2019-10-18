@@ -9,7 +9,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - workdir
+            - build
 
   publish-github-release:
     docker:
@@ -19,8 +19,8 @@ jobs:
           at: .
       - run:
           command: |
-            VERSION=$( ./workdir/strangerseq -version )
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./workdir/
+            VERSION=$( ./build/strangerseq -version )
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./build/
 
 workflows:
   version: 2
