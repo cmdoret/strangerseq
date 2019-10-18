@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/cmdoret/strangerseq/kmers"
+	"./kmers"
 )
 
 type args struct {
