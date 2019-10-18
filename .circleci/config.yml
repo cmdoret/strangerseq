@@ -1,36 +1,8 @@
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/golang:1.12
-    steps:
-      - run: make
-
-  publish-github-release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - run:
-          name: "Publish Release on GitHub"
-          command: |
-            VERSION=$(strangerseq -version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} workdir/
-
-workflows:
-  version: 2
-  main:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-             only: /v[0-9]+(\.[0-9]+)*(-.*)*/
-      - publish-github-release:
-          requires:
-            - build
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-             only: /v[0-9]+(\.[0-9]+)*(-.*)*/
+  version: 2.1
+  jobs:
+    build:
+      docker: 
+        - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
+      steps:
+        - checkout # check out the code in the project directory
+        - run: echo "hello world" # run the `echo` command
