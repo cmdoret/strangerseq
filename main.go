@@ -45,7 +45,7 @@ func parseArgs() *args {
 	flag.Parse()
     if *clArgs.Version {
       fmt.Println(version)
-      os.Exit(1)
+      os.Exit(0)
     }
 	if *clArgs.GenomeFile == "" {
 		log.Fatal("Path to input genome required.")
