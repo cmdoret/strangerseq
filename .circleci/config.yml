@@ -19,7 +19,7 @@ jobs:
           at: .
       - run:
           command: |
-            VERSION=$( ./build/strangerseq -version )
+            VERSION=$( ./build/strangerseq-linux -version )
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./build/
 
 workflows:
