@@ -7,16 +7,16 @@ jobs:
       - checkout
       - run: make
       - persist_to_workspace:
-          root: /root/project
+          root: .
           paths:
-            - ./workspace
+            - workspace
 
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: /root/workspace
+          at: .
       - run:
           name: "Publish Release on GitHub"
           command: |
