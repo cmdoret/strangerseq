@@ -1,4 +1,5 @@
 GOFILES = $(shell find . -name '*.go')
+VERSION=""
 
 default: build
 
@@ -9,4 +10,4 @@ build: workdir/strangerseq
 
 workdir/strangerseq: $(GOFILES)
 	go get -d .
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o workdir/strangerseq .
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-X main.version=$(VERSION)" -o workdir/strangerseq .

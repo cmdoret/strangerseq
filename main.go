@@ -21,6 +21,8 @@ type args struct {
     Version    *bool
 }
 
+var version string
+
 func parseArgs() *args {
 	var clArgs *args
 	clArgs = new(args)
@@ -42,7 +44,7 @@ func parseArgs() *args {
     clArgs.Version = flag.Bool("version", false, "Shows version number of the binary.")
 	flag.Parse()
     if *clArgs.Version {
-      fmt.Println("v0.0.3b")
+      fmt.Println(version)
       os.Exit(1)
     }
 	if *clArgs.GenomeFile == "" {

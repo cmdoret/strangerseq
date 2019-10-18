@@ -5,7 +5,7 @@ jobs:
       - image: circleci/golang:1.12
     steps:
       - checkout
-      - run: make
+      - run: make VERSION=${CIRCLE_TAG}
       - persist_to_workspace:
           root: .
           paths:
@@ -21,7 +21,7 @@ jobs:
           name: "Publish Release on GitHub"
           command: |
             VERSION=$(./workdir/strangerseq -version)
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} workdir
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} workdir/
 
 workflows:
   version: 2.1
