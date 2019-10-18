@@ -17,9 +17,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - command: |
-          VERSION=$(./workdir/strangerseq -version)
-          ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./workdir/
+      - run:
+        - name: "Publish release on github"
+        - command: |
+            VERSION=$(./workdir/strangerseq -version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./workdir/
 
 workflows:
   version: 2.1
