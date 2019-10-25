@@ -16,7 +16,7 @@ jobs:
       - image: circleci/golang:1.12
     steps:
       - checkout
-      - run: go test ./kmers
+      - run: make test
 
   publish-github-release:
     docker:
