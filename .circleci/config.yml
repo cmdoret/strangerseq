@@ -5,7 +5,7 @@ jobs:
       - image: circleci/golang:1.12
     steps:
       - checkout
-      - run: make release VERSION=$(date "+%Y%m%d%M%S")
+      - run: make release VERSION=$(date "+%Y%m%d")
       - persist_to_workspace:
           root: .
           paths:
