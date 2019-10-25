@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-// Generates a random sequence weighted by GC content
+// RandGCWeightSeq generates a random sequence weighted by GC content
 // cumWeights must be cumulative base weights, with 1 as maximum value
-func randGCWeightSeq(seqlen int, bases []string, cumWeights []float64) string {
+func RandGCWeightSeq(seqlen int, bases []string, cumWeights []float64) string {
 	var seq strings.Builder
 	seq.Grow(seqlen)
 	for i := 0; i < seqlen; i++ {
@@ -48,7 +48,7 @@ func RandSeqs(nseq int, seqlen int, bases []string, gc float64) []string {
 		probArr[i] = v / maxSum
 	}
 	for i := 0; i < nseq; i++ {
-		sequences[i] = randGCWeightSeq(seqlen, bases, probArr)
+		sequences[i] = RandGCWeightSeq(seqlen, bases, probArr)
 	}
 	return sequences
 }
