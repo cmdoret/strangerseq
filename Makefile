@@ -22,6 +22,6 @@ build/strangerseq-linux: $(GOFILES) build/ deps
 .PHONY: release
 release: build/strangerseq-linux build/strangerseq-windows.exe build/strangerseq-osx
 
-.PHONY test
+.PHONY: test
 test: deps
 	go test ./kmers
