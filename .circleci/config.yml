@@ -11,6 +11,12 @@ jobs:
           paths:
             - build
 
+  test:
+    docker:
+      - image: circleci/golang:1.12
+    steps:
+      - run: go test ./kmers
+
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
@@ -27,9 +33,11 @@ workflows:
   main:
     jobs:
       - build
+      - test
       - publish-github-release:
           requires:
             - build
+            - test
           filters:
             branches:
               only: master
