@@ -6,6 +6,29 @@ import (
 	"strings"
 )
 
+// Define sorting interface to sort sequence according to their (full) scores
+type SeqsAndScores struct {
+	Seqs       []string
+	KmerScores []float64
+	FullScores []float64
+}
+
+type SortByScore SeqsAndScores
+
+func (sbs SortByScore) Len() int {
+	return len(sbs.Seqs)
+}
+
+func (sbs SortByScore) Swap(i, j int) {
+	sbs.Seqs[i], sbs.Seqs[j] = sbs.Seqs[j], sbs.Seqs[i]
+	sbs.KmerScores[i], sbs.KmerScores[j] = sbs.KmerScores[j], sbs.KmerScores[i]
+	sbs.FullScores[i], sbs.FullScores[j] = sbs.FullScores[j], sbs.FullScores[i]
+}
+
+func (sbs SortByScore) Less(i, j int) bool {
+	return sbs.FullScores[i] < sbs.FullScores[j]
+}
+
 // RandGCWeightSeq generates a random sequence weighted by GC content
 // cumWeights must be cumulative base weights, with 1 as maximum value
 func RandGCWeightSeq(seqlen int, bases []string, cumWeights []float64) string {
