@@ -13,8 +13,11 @@ type Chain struct {
 }
 
 // FillChain populates transition probabilities in the l-order
-// markov chain based on the Genome Kmer profile.
+// markov chain based on the Genome Kmer profile. Laplacian smoothing
+// is used to avoid being stuck in a state.
 func (g *Genome) FillChain() {
+	smoothing := 0.4
+	nChoices := float64(len(g.Bases))
 	for kmer, occ := range g.Kmers {
 		// Read sequence in windows of length k
 		// Fill transition matrix at k-1 -> base
@@ -24,13 +27,13 @@ func (g *Genome) FillChain() {
 	}
 	var ltot float64
 	for l := range g.Chain.Matrix { // loop over rows of matrix
-		ltot = 0
+		ltot = 0.0
 		// Compute sum of transition probabilities for given l-mer
 		for _, bocc := range g.Chain.Matrix[l] {
 			ltot += bocc
 		}
-		for b := range g.Chain.Matrix[l] {
-			g.Chain.Matrix[l][b] /= ltot
+		for b, v := range g.Chain.Matrix[l] {
+			g.Chain.Matrix[l][b] = (v + smoothing) / (ltot + smoothing*nChoices)
 		}
 	}
 }

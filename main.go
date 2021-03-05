@@ -7,7 +7,7 @@ import (
 	"os"
 	"sort"
 
-	"./kmers"
+	"github.com/cmdoret/strangerseq/kmers"
 )
 
 type args struct {
