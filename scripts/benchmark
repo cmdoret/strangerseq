@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Generate sequences using strangerseq with a range of parameters for benchmarking purpose
+# cmdoret, 20210304
+
+# Read CL args
+function usage {
+  echo "usage: ./$(basename $0) genome.fa out_dir/"
+}
+
+FASTA="$1"
+OUTDIR="$2"
+if [ -z "${OUTDIR}" ]; then
+        echo "No output directory specified"
+        usage
+        exit 1
+fi
+if [ -z "${FASTA}" ]; then
+        echo "No genome directory specified"
+        usage
+        exit 1
+fi
+mkdir -p "${OUTDIR}"
+
+### Benchmark parameter ranges
+LENGTHS=( 50 100 500 1000 10000 ) 
+KMER_SIZES=( 8 )
+GC_WEIGHTS=( 0 0.25 0.5 0.75 1 )
+
+# Constants
+NSEQS=1000
+
+# Initialize output
+BENCH="${OUTDIR}/bench_data.tsv"
+echo -e "seq_len\tk\tgc_weight\tmode\tsubset\tkmer_score\tfull_score\tsequence" > "${BENCH}"
+
+# Loading bar :)
+spin="▁▂▃▄▅▆▇█▇▆▅▄▃▂▁"
+tput civis # Invisible cursor
+function restore_cursor() {
+  tput cnorm # reset cursor
+}
+trap restore_cursor EXIT # restore cursor if script killed
+
+# Compute number of runs
+todo=$((${#LENGTHS[@]}*${#KMER_SIZES[@]}*${#GC_WEIGHTS[@]}*2))
+
+# Run benchmark for each combination of parameter
+GENOME=$(grep -v ">" "${FASTA}" | tr -d '\n')
+for LEN in "${LENGTHS[@]}"; do
+  for KMER in "${KMER_SIZES[@]}"; do
+    for GC in "${GC_WEIGHTS[@]}"; do
+      for TYPE in "" "-similar"; do
+        # Each combination is run with divergent or similar sequences
+        if [ -z "${TYPE}" ]; then
+          MODE="divergent"; else
+          MODE="similar"
+        fi
+        step=$(((done + 1) % ${#spin}))
+        echo -n "${spin:step:1} progress: $((100*done/todo))% (${done} / ${todo})"
+        echo -en "\r"
+        ((done++))
+        # Store strangerseq output into a table
+        strangerseq -fasta "${FASTA}" \
+                    -comp.seq \
+                    -seq.len "${LEN}" \
+                    -kmer.size "${KMER}" \
+                    -gc.weight "${GC}" \
+                    "${TYPE}" -n.seq "${NSEQS}" \
+                    2>/dev/null |
+          tr ' ' '\t' |
+          awk -vslen="${LEN}" \
+              -vkmer="${KMER}" \
+              -vgcw="${GC}" \
+              -vmode="${MODE}" \
+              -vOFS="\t" \
+              '{print slen,kmer,gcw,mode,$0}' >> "${BENCH}"
+      done
+      # Sample random sequences of desired length from the genome
+      #for ((i=0; i < ${NSEQS}; i++)); do
+      #        START=$((1 + $RANDOM % 10))
+      #        END=$((START+${LEN}))
+      #        echo -e "${LEN}\t\t\trandom\t\t\t${GENOME:$START:$END}" |
+      #          tr 'actg' 'ACTG' |
+      #          tr -d 'N' >> "${BENCH}"
+      #done
+    done
+  done
+done
+tput cnorm
+
+

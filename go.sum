@@ -1,0 +1,12 @@
+github.com/klauspost/compress v1.11.9 h1:5OCMOdde1TCT2sookEuVeEZzA8bmRSFV3AwPDZAG8AA=
+github.com/klauspost/compress v1.11.9/go.mod h1:aoV0uJVorq1K+umq18yTdKaF57EivdYsUV+/s2qKfXs=
+github.com/klauspost/pgzip v1.2.5 h1:qnWYvvKqedOF2ulHpMG72XQol4ILEJ8k2wwRl/Km8oE=
+github.com/klauspost/pgzip v1.2.5/go.mod h1:Ch1tH69qFZu15pkjo5kYi6mth2Zzwzt50oCQKQE9RUs=
+github.com/shenwei356/bio v0.0.0-20210214151329-aff1c373610b h1:ZlBFkewtnExFmzL4lQauXWBmSVbp7fMZCmvjf7TYy1k=
+github.com/shenwei356/bio v0.0.0-20210214151329-aff1c373610b/go.mod h1:tKIebGVfqYwgLIoXohkLiQO685B2d3l9vTf1cjRZaVk=
+github.com/shenwei356/bpool v0.0.0-20160710042833-f9e0ee4d0403 h1:/3JklLnHXiWUBxWc3joQYavDQJpncRhRA909cUb7eOw=
+github.com/shenwei356/bpool v0.0.0-20160710042833-f9e0ee4d0403/go.mod h1:YkgdTWfNnJgv5HVJbVSDmxQtkK3/jZWDoqcG26BVU8k=
+github.com/shenwei356/util v2020.12.31+incompatible h1:CQYnsFHZ6A6OdDTnx/+xYbY4AhRFXaTG1muSvOJZGEo=
+github.com/shenwei356/util v2020.12.31+incompatible/go.mod h1:n3qhc3bQzlqJ2/5v79hgl0Gd3WzJOkI8XcUix25Brdg=
+github.com/shenwei356/xopen v0.0.0-20181203091311-f4f16ddd3992 h1:RXEEyKj0JL3SrRIYsWIEyy4AwjHbI3I8aDGK6CA4+YI=
+github.com/shenwei356/xopen v0.0.0-20181203091311-f4f16ddd3992/go.mod h1:6EQUa6I7Zsl2GQKqcL9qGLrTzVE+oZyly+uhzovQYSk=
